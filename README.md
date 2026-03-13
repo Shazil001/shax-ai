@@ -72,4 +72,4 @@ Visit [http://localhost:3000](http://localhost:3000) to see your app in action.
 - `/src/api`: Backend logic for credits and data persistence
 
 ---
-Developed with ❤️ by [Your Name]
+Developed with ❤️ by Shazil mothi kt
