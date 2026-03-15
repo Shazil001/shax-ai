@@ -42,7 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const { data: { session }, error } = await supabase.auth.getSession();
         if (error) throw error;
         if (session?.user) {
-          await loadProfile(session.user.id);
+          await loadProfile(session.user.id, session.user);
         } else {
           setLoading(false);
         }
@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session?.user) {
-        await loadProfile(session.user.id);
+        await loadProfile(session.user.id, session.user);
       } else {
         // Only clear if not in demo mode
         if (localStorage.getItem(IS_DEMO_KEY) !== "true") {
@@ -70,7 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, [supabase]);
 
-  const loadProfile = async (userId: string) => {
+  const loadProfile = async (userId: string, sessionUser: any = null) => {
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -91,12 +91,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           firecrawl_key: data.firecrawl_key || "",
           created_at: data.created_at,
         });
+        return;
       }
     } catch (err) {
       console.error("Profile load error:", err);
-    } finally {
-      setLoading(false);
     }
+    
+    // Fallback if database profile doesn't exist or table is missing
+    if (sessionUser) {
+      setUser({
+        id: sessionUser.id,
+        email: sessionUser.email || "",
+        name: sessionUser.user_metadata?.full_name || "User",
+        avatar_url: sessionUser.user_metadata?.avatar_url || "https://api.dicebear.com/7.x/avataaars/svg?seed=Lucky",
+        plan: "free",
+        credits: 100, // Grant default credits so app functions
+        created_at: sessionUser.created_at || new Date().toISOString(),
+      });
+    }
+
+    setLoading(false);
   };
 
   const signInWithGoogle = async () => {
