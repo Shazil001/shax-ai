@@ -1,5 +1,5 @@
 const isPlaceholderKey = (key: string | undefined) => 
-  !key || key.includes("your-firecrawl-api-key") || key === "placeholder-key" || key.startsWith("fc-your");
+  !key || key.includes("your-firecrawl-api-key") || key === "placeholder-key";
 
 const FIRECRAWL_API_KEY = isPlaceholderKey(process.env.FIRECRAWL_API_KEY) ? "dummy" : process.env.FIRECRAWL_API_KEY!;
 const FIRECRAWL_API_URL = "https://api.firecrawl.dev/v1";
