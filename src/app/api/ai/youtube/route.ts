@@ -3,7 +3,8 @@ import { generateCompletion } from "@/lib/gemini";
 
 export async function POST(request: Request) {
   try {
-    const { transcript } = await request.json();
+    const data = await request.json();
+    const transcript = data?.transcript as string | undefined;
 
     if (!transcript) {
       return NextResponse.json({ error: "Transcript is required" }, { status: 400 });
