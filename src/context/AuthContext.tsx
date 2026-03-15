@@ -88,6 +88,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           avatar_url: data.avatar_url || "",
           plan: data.plan || "free",
           credits: data.credits || 0,
+          gemini_key: data.gemini_key || "",
+          firecrawl_key: data.firecrawl_key || "",
           created_at: data.created_at,
         });
       }
@@ -191,6 +193,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const dbUpdates: any = {};
       if (updates.name) dbUpdates.full_name = updates.name;
       if (updates.avatar_url) dbUpdates.avatar_url = updates.avatar_url;
+      if (updates.gemini_key) dbUpdates.gemini_key = updates.gemini_key;
+      if (updates.firecrawl_key) dbUpdates.firecrawl_key = updates.firecrawl_key;
       
       const { error } = await supabase
         .from("profiles")

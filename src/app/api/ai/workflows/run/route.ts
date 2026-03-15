@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { generateCompletion } from "@/lib/openai";
+import { generateCompletion } from "@/lib/gemini";
 
 export async function POST(request: Request) {
   try {

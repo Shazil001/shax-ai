@@ -5,7 +5,7 @@ export interface User {
   avatar_url?: string;
   plan: "free" | "pro";
   credits: number;
-  openai_key?: string;
+  gemini_key?: string;
   firecrawl_key?: string;
   created_at: string;
 }

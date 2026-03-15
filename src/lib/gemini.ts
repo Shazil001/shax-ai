@@ -1,22 +1,23 @@
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const isPlaceholderKey = (key: string | undefined) => 
-  !key || key.includes("your-openai-api-key") || key === "placeholder-key" || key.startsWith("sk-your");
+  !key || key.includes("your-gemini-api-key") || key === "placeholder-key" || key.startsWith("AIza");
 
-export const openai = new OpenAI({
-  apiKey: isPlaceholderKey(process.env.OPENAI_API_KEY) ? "dummy-key" : process.env.OPENAI_API_KEY!,
-});
+const genAI = new GoogleGenerativeAI(
+  process.env.GEMINI_API_KEY || "dummy-key"
+);
+
+export const geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export async function generateCompletion(
   systemPrompt: string,
   userMessage: string,
-  maxTokens: number = 2000
+  maxTokens: number = 2048
 ) {
-  if (isPlaceholderKey(process.env.OPENAI_API_KEY)) {
+  if (isPlaceholderKey(process.env.GEMINI_API_KEY)) {
     console.log("SIMULATION MODE: Returning mock AI response");
-    await new Promise(r => setTimeout(r, 1500)); // Simulate AI delay
+    await new Promise(r => setTimeout(r, 1500)); 
     
-    // Simple heuristic for mock responses
     if (systemPrompt.includes("summarize") || systemPrompt.includes("Summary")) {
       return "This is a comprehensive AI-simulated summary of your content. It highlights the core concepts, key takeaways, and strategic insights found in your input. The analysis identifies three primary themes and provides a structured overview for quick consumption.";
     }
@@ -36,40 +37,55 @@ export async function generateCompletion(
         followUps: ["Schedule follow-up with the design team"]
       });
     }
-    return "This is a simulated AI response from Shax AI. To enable real AI responses, please provide a valid OpenAI API key in your Vercel environment variables.";
+    return "This is a simulated AI response from Shax AI. To enable real AI responses, please provide a valid Gemini API key in your environment variables.";
   }
 
-  const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: userMessage },
+  const chat = geminiModel.startChat({
+    history: [
+      {
+        role: "user",
+        parts: [{ text: systemPrompt }],
+      },
+      {
+        role: "model",
+        parts: [{ text: "Understood. I will act as requested." }],
+      },
     ],
-    max_tokens: maxTokens,
-    temperature: 0.7,
+    generationConfig: {
+      maxOutputTokens: maxTokens,
+      temperature: 0.7,
+    },
   });
-  return response.choices[0].message.content || "";
+
+  const result = await chat.sendMessage(userMessage);
+  const response = await result.response;
+  return response.text();
 }
 
 export async function generateStreamingCompletion(
   systemPrompt: string,
   userMessage: string
 ) {
-  if (isPlaceholderKey(process.env.OPENAI_API_KEY)) {
-    // Return a dummy stream structure if possible, but for simplicity we'll just throw or return null
-    // Realistically, we'll just not use streaming in demo mode or implement a fake generator
+  if (isPlaceholderKey(process.env.GEMINI_API_KEY)) {
     throw new Error("Streaming is not supported in simulation mode. Attach a real API key.");
   }
 
-  const stream = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: userMessage },
+  const chat = geminiModel.startChat({
+    history: [
+      {
+        role: "user",
+        parts: [{ text: systemPrompt }],
+      },
+      {
+        role: "model",
+        parts: [{ text: "Understood. I will act as requested." }],
+      },
     ],
-    stream: true,
-    max_tokens: 2000,
-    temperature: 0.7,
+    generationConfig: {
+      temperature: 0.7,
+    },
   });
-  return stream;
+
+  const result = await chat.sendMessageStream(userMessage);
+  return result.stream;
 }

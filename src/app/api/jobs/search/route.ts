@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { searchWeb } from "@/lib/firecrawl";
-import { generateCompletion } from "@/lib/openai";
+import { generateCompletion } from "@/lib/gemini";
 
 export async function POST(request: Request) {
   try {
@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     const searchQuery = `${title} jobs in ${location || "Remote"} ${experience !== "all" ? experience : ""}`;
     const searchResults = await searchWeb(searchQuery, 8);
 
-    // 2. Use OpenAI to extract structured job data from results
+    // 2. Use Gemini to extract structured job data from results
     const systemPrompt = `You are a job data extractor. From the provided search results, extract a list of job openings.
     For each job, provide:
     - title

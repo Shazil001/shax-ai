@@ -34,7 +34,7 @@ export default function SettingsPage() {
   
   const [profileData, setProfileData] = useState({
     name: user?.name || "",
-    openai_key: user?.openai_key || "",
+    gemini_key: user?.gemini_key || "",
     firecrawl_key: user?.firecrawl_key || "",
   });
 
@@ -51,7 +51,7 @@ export default function SettingsPage() {
     try {
       await updateProfile({
         name: profileData.name,
-        openai_key: profileData.openai_key,
+        gemini_key: profileData.gemini_key,
         firecrawl_key: profileData.firecrawl_key,
       });
       toast.success("Settings saved successfully!");
@@ -239,12 +239,12 @@ export default function SettingsPage() {
               </p>
               <div className="space-y-4">
                 <div>
-                  <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] mb-1 block">OpenAI API Key</label>
+                  <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] mb-1 block">Gemini API Key</label>
                   <input
                     type="password"
-                    value={profileData.openai_key}
-                    onChange={(e) => setProfileData({ ...profileData, openai_key: e.target.value })}
-                    placeholder="sk-..."
+                    value={profileData.gemini_key}
+                    onChange={(e) => setProfileData({ ...profileData, gemini_key: e.target.value })}
+                    placeholder="AIza..."
                     className="w-full px-4 py-2.5 rounded-xl bg-[hsl(var(--accent))] border border-[hsl(var(--border))] text-sm outline-none font-mono"
                   />
                 </div>

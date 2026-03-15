@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS profiles (
   avatar_url TEXT,
   credits INTEGER DEFAULT 50,
   plan TEXT DEFAULT 'free',
-  openai_key TEXT,
+  gemini_key TEXT,
   firecrawl_key TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL

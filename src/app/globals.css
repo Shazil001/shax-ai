@@ -3,60 +3,59 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 262 83% 58%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 262 83% 58%;
-  --radius: 0.75rem;
-  --sidebar-width: 280px;
-  --topbar-height: 64px;
+  --background: 240 10% 4%; /* Near black */
+  --foreground: 0 0% 98%;
+  --card: 240 10% 6%; /* Slightly lighter near black */
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 4%;
+  --popover-foreground: 0 0% 98%;
+  
+  /* Vibrant neon purple / pink / electric blue accents common in Web3/3D styles */
+  --primary: 280 100% 65%;
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 240 10% 12%;
+  --secondary-foreground: 0 0% 98%;
+  
+  --muted: 240 10% 12%; /* Subtle borders and tags */
+  --muted-foreground: 240 5% 65%;
+  
+  --accent: 280 100% 65%;
+  --accent-foreground: 0 0% 100%;
+  
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  
+  --border: 240 10% 15%; /* Thin crisp borders */
+  --input: 240 10% 12%;
+  --ring: 280 100% 65%;
+  
+  --radius: 1rem; /* Sleeker curves, slightly sharper */
 }
 
-.dark {
-  --background: 224 71% 4%;
-  --foreground: 213 31% 91%;
-  --card: 224 71% 4%;
-  --card-foreground: 213 31% 91%;
-  --popover: 224 71% 4%;
-  --popover-foreground: 213 31% 91%;
-  --primary: 262 83% 58%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 222.2 47.4% 11.2%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 223 47% 11%;
-  --muted-foreground: 215.4 16.3% 56.9%;
-  --accent: 216 34% 17%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 63% 31%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 216 34% 17%;
-  --input: 216 34% 17%;
-  --ring: 262 83% 58%;
+/* Force dark mode variables since Web3/cinematic styles usually ignore light mode */
+.dark, :root {
+  --background: 240 10% 3%;
+  --foreground: 0 0% 98%;
+  --card: 240 5% 7%;
+  --border: 240 5% 15%;
+  --muted: 240 5% 15%;
+  --primary: 290 100% 60%; /* Electric purple */
 }
 
 * {
-  border-color: hsl(var(--border));
+  border-color: hsl(var(--border) / 0.8);
 }
 
 body {
   background: hsl(var(--background));
   color: hsl(var(--foreground));
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6, .display-font {
+  font-family: var(--font-outfit), system-ui, sans-serif;
 }
 
 /* Scrollbar styling */
@@ -64,116 +63,129 @@ body {
   width: 6px;
   height: 6px;
 }
-
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground) / 0.3);
+  background: hsl(var(--border));
   border-radius: 3px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.5);
+  background: hsl(var(--muted-foreground));
 }
 
-/* Glass effect */
+/* Rich Glassmorphism */
 .glass {
-  background: hsl(var(--card) / 0.8);
-  backdrop-filter: blur(12px);
-  border: 1px solid hsl(var(--border) / 0.5);
+  background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.5);
 }
 
-/* Gradient text */
+/* Vibrant Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, hsl(262 83% 58%), hsl(280 90% 65%), hsl(320 80% 60%));
+  background: linear-gradient(135deg, #c084fc, #ec4899, #3b82f6);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Gradient background */
-.gradient-bg {
-  background: linear-gradient(135deg, hsl(262 83% 58% / 0.1), hsl(280 90% 65% / 0.05));
+.gradient-text-alt {
+  background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Card hover effect */
+/* Cinematic glowing background blobs */
+.glow-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+  z-index: -1;
+  pointer-events: none;
+  animation: float 20s ease-in-out infinite alternate;
+}
+
+.glow-purple { background: #a855f7; }
+.glow-pink { background: #ec4899; }
+.glow-blue { background: #3b82f6; }
+
+@keyframes float {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -50px) scale(1.1); }
+  100% { transform: translate(-20px, 20px) scale(0.9); }
+}
+
+/* Card hover scaling and ultra-crisp shadows */
 .card-hover {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px hsl(262 83% 58% / 0.15);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 30px 60px -10px rgba(0,0,0,0.8), 
+              0 0 20px -2px rgba(168, 85, 247, 0.2);
+  border-color: rgba(255,255,255,0.15);
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
 }
 
-/* Animated gradient border */
-.gradient-border {
+/* Glow Border Button */
+.btn-glow {
   position: relative;
-  border-radius: var(--radius);
+  border-radius: calc(var(--radius) * 1.5);
+  background: rgba(255,255,255,0.03);
+  overflow: hidden;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #fff;
 }
-
-.gradient-border::before {
+.btn-glow::before {
   content: "";
   position: absolute;
-  inset: -1px;
-  background: linear-gradient(135deg, hsl(262 83% 58%), hsl(280 90% 65%), hsl(320 80% 60%));
-  border-radius: inherit;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+.btn-glow:hover::before {
+  left: 100%;
+}
+.btn-glow:hover {
+  transform: scale(1.05);
+  border-color: rgba(255,255,255,0.2);
+  box-shadow: 0 0 20px rgba(255,255,255,0.1);
 }
 
-.gradient-border:hover::before {
-  opacity: 1;
-}
-
-/* Skeleton loading */
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-.skeleton {
-  background: linear-gradient(
-    90deg,
-    hsl(var(--muted)) 25%,
-    hsl(var(--muted-foreground) / 0.1) 50%,
-    hsl(var(--muted)) 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: var(--radius);
-}
-
-/* Pulse glow */
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 15px hsl(262 83% 58% / 0.3); }
-  50% { box-shadow: 0 0 30px hsl(262 83% 58% / 0.5); }
-}
-
-.pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-/* Smooth page transitions */
-.page-transition {
-  animation: fadeIn 0.3s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Toast styles */
-.toast-success {
-  background: hsl(142 76% 36%);
+.btn-primary-3d {
+  background: linear-gradient(135deg, #a855f7, #ec4899);
+  border: none;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.2),
+              0 8px 20px rgba(168, 85, 247, 0.4);
   color: white;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-primary-3d:hover {
+  transform: translateY(-2px);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.3),
+              0 12px 30px rgba(168, 85, 247, 0.6);
+  filter: brightness(1.1);
+}
+.btn-primary-3d:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 2px 0 rgba(0,0,0,0.1),
+              0 4px 10px rgba(168, 85, 247, 0.3);
 }
 
-.toast-error {
-  background: hsl(0 84% 60%);
-  color: white;
+/* Cinematic image overlay */
+.img-overlay {
+  position: relative;
+}
+.img-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, hsl(var(--background)) 5%, transparent 60%);
+  z-index: 10;
 }
