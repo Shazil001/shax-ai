@@ -22,7 +22,11 @@ export async function POST(request: Request) {
 
     const aiResponse = await generateCompletion(systemPrompt, "Please enhance my resume.", 3000);
     
-    const enhancedData = JSON.parse(aiResponse);
+    let rawResponse = aiResponse;
+    if (rawResponse.startsWith("```")) {
+      rawResponse = rawResponse.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+    }
+    const enhancedData = JSON.parse(rawResponse);
 
     return NextResponse.json(enhancedData);
   } catch (error) {

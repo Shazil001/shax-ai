@@ -20,7 +20,12 @@ export async function POST(request: Request) {
     Format the response as valid JSON.`;
 
     const aiResponse = await generateCompletion(systemPrompt, transcript, 3000);
-    const result = JSON.parse(aiResponse);
+    
+    let rawResponse = aiResponse;
+    if (rawResponse.startsWith("```")) {
+      rawResponse = rawResponse.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+    }
+    const result = JSON.parse(rawResponse);
 
     return NextResponse.json(result);
   } catch (error) {

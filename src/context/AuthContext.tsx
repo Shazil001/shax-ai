@@ -166,6 +166,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Clear the demo mode cookie
     document.cookie = "shax_ai_demo_mode=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
     setUser(null);
+    window.location.href = "/login";
   };
 
   const updateCredits = async (newCredits: number) => {

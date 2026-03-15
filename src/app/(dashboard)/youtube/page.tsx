@@ -66,7 +66,9 @@ export default function YoutubePage() {
       
       if (res.ok) {
         // The API returns { result: { summary: "...", bulletPoints: [...], ... } }
-        const result = JSON.parse(data.result);
+        let rawStr = data.result;
+        rawStr = rawStr.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+        const result = JSON.parse(rawStr);
         const newSummary: Summary = {
           id: Date.now().toString(),
           videoUrl: url,

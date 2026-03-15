@@ -32,7 +32,11 @@ export async function POST(request: Request) {
     const userMessage = `Search Results: ${JSON.stringify(searchResults)}`;
     const aiResponse = await generateCompletion(systemPrompt, userMessage, 3000);
 
-    const jobs = JSON.parse(aiResponse);
+    let rawResponse = aiResponse;
+    if (rawResponse.startsWith("```")) {
+      rawResponse = rawResponse.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+    }
+    const jobs = JSON.parse(rawResponse);
 
     return NextResponse.json(jobs);
   } catch (error) {
