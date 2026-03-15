@@ -30,9 +30,8 @@ export async function middleware(request: NextRequest) {
 
   // IMPORTANT: Do NOT use supabase.auth.getSession() in middleware.
   // Use getUser() instead — it validates the session by contacting the Supabase auth server.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data, error: authError } = await supabase.auth.getUser();
+  const user = data?.user;
 
   // Check for our custom demo mode cookie
   const isDemoMode =
@@ -47,19 +46,23 @@ export async function middleware(request: NextRequest) {
   // If NOT a real user and NOT in demo mode, redirect to login
   // (except for auth pages, landing page, and API routes)
   if (!user && !isDemoMode && !isAuthPage && !isLandingPage && !isApiRoute) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
+    const url = new URL("/login", request.url);
     return NextResponse.redirect(url);
   }
 
-  // If signed in (real or demo) and on /login, redirect to /dashboard
-  if ((user || isDemoMode) && pathname === "/login") {
-    const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
+  // If signed in (real session) and on /login, redirect to /dashboard
+  // We prioritize real user over demo mode for the /login redirect to avoid loops
+  if (user && pathname === "/login") {
+    const url = new URL("/dashboard", request.url);
     return NextResponse.redirect(url);
   }
+
+  // If in demo mode and on /login, only redirect if we're not coming from a sign-out
+  // But for safety, let's let the user see the login page if they explicitly navigated there.
+  // This helps break redirect loops if the cookie wasn't cleared.
 
   // IMPORTANT: Return the supabaseResponse — it has refreshed session cookies.
+
   // If you return a different NextResponse, the session will break.
   return supabaseResponse;
 }

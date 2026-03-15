@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { User } from "@/types";
+import { createClient } from "@/lib/supabase/client";
 
 interface AuthContextType {
   user: User | null;
@@ -14,8 +15,6 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-import { createClient } from "@/lib/supabase/client";
 
 const IS_DEMO_KEY = "shax_ai_demo_mode";
 const DEMO_USER_KEY = "shax_ai_demo_user";
@@ -150,6 +149,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (e) {}
     localStorage.removeItem(IS_DEMO_KEY);
     localStorage.removeItem(DEMO_USER_KEY);
+    // Clear the demo mode cookie
+    document.cookie = "shax_ai_demo_mode=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
     setUser(null);
   };
 

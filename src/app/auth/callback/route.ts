@@ -52,5 +52,14 @@ export async function GET(request: Request) {
   }
 
   // Return user to login page with error indication
-  return NextResponse.redirect(`${origin}/login?error=auth_callback_failed`);
+  const redirectUrl = new URL("/login", request.url);
+  redirectUrl.searchParams.set("error", "auth_callback_failed");
+  
+  // Handle production hostname for error redirect too
+  const forwardedHost = request.headers.get("x-forwarded-host");
+  if (forwardedHost && process.env.NODE_ENV !== "development") {
+    return NextResponse.redirect(`https://${forwardedHost}${redirectUrl.pathname}${redirectUrl.search}`);
+  }
+
+  return NextResponse.redirect(redirectUrl.toString());
 }
